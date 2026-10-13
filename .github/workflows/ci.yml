@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    name: Resolve remote package + build Demo for iOS Simulator
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Toolchain
+        run: xcodebuild -version
+      - name: Resolve AgentJobRelay from GitHub (Up to Next Major from 1.0.0)
+        run: xcodebuild -resolvePackageDependencies -project Demo.xcodeproj -scheme Demo
+      - name: Build Demo (generic iOS Simulator, no device required)
+        run: xcodebuild build -project Demo.xcodeproj -scheme Demo -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO
