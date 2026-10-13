@@ -55,4 +55,9 @@ What the code has been through instead:
 - `RelayDashboardView.swift` and `DemoApp.swift` import SwiftUI, so they cannot be compiled on Linux. They were reviewed by hand, including by an independent reviewer.
 - The numbers quoted above (18 ticks, 4 → 3 submit calls → jobs, 7,670 tokens, convergence) come from running the library's `RelaySimulation` at this app's settings (1 event per tick, seed 2026) on Linux. That is the same code the app drives, but not the app itself.
 
-_CI results are added here after the first run reports._
+**CI:** [GitHub Actions](https://github.com/rajatslakhina/agent-job-relay-demo-app/actions) runs one `macos-15` job on every push to `main`:
+
+1. `xcodebuild -resolvePackageDependencies`, which resolved `AgentJobRelay` **v1.0.0** from GitHub through the `XCRemoteSwiftPackageReference`.
+2. `xcodebuild build -scheme Demo -destination 'generic/platform=iOS Simulator'`.
+
+That job passed on the first push. So the remote package resolves, and all four app files, including the two SwiftUI files that were never compiled before, build against the released library. It proves the app **compiles for** the iOS Simulator. It does not prove the app **runs** there, which, as stated above, has not been checked.
